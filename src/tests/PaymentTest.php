@@ -63,7 +63,7 @@ final class PaymentTest extends TestCase
         if (env("FIUU_ENVIRONMENT") == "sandbox") {
             $this->assertStringStartsWith("https://sandbox-payment.fiuu.com", $url);
         } else {
-            $this->assertStringStartsWith("https://pay.merchant.razer.com", $url);
+            $this->assertStringStartsWith("https://pay.fiuu.com", $url);
         }
 
         return $url;
