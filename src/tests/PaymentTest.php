@@ -60,7 +60,7 @@ final class PaymentTest extends TestCase
         $this->assertStringStartsWith("https://", $url);
 
         // check domain must be pointing to correct endpoint
-        if (env("RMS_ENVIRONMENT") == "sandbox") {
+        if (env("FIUU_ENVIRONMENT") == "sandbox") {
             $this->assertStringStartsWith("https://sandbox-payment.fiuu.com", $url);
         } else {
             $this->assertStringStartsWith("https://pay.merchant.razer.com", $url);
@@ -92,7 +92,7 @@ final class PaymentTest extends TestCase
     {
         $amount = number_format(self::$amount*1, 2, '.', '');
         writelog("Amount: $amount");
-        $calculatedVcode = md5($amount . env('RMS_MERCHANT_ID') . self::$orderid . env('RMS_VERIFY_KEY'));
+        $calculatedVcode = md5($amount . env('FIUU_MERCHANT_ID') . self::$orderid . env('FIUU_VERIFY_KEY'));
         writelog("Calculated Vcode - $calculatedVcode");
         // check url contains valid vcode
         $this->assertStringContainsString("&vcode=$calculatedVcode", $url);
