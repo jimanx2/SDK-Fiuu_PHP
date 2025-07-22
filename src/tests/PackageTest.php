@@ -19,9 +19,9 @@ final class PackageTest extends TestCase
      */
     public function testCanInstantateBaseClass(): void
     {
-        $rms = new FiuuPayment(null, null, null, null);
+        $fiuu = new FiuuPayment(null, null, null, null);
 
-        $this->assertNotNull($rms);
-        $this->assertEquals(get_class($rms), FiuuPayment::class);
+        $this->assertNotNull($fiuu);
+        $this->assertEquals(get_class($fiuu), FiuuPayment::class);
     }
 }
