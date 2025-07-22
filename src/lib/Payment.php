@@ -18,7 +18,7 @@ class Payment
         $this->baseUrl = ($environment === 'sandbox') ? 'https://sandbox-payment.fiuu.com/RMS/pay/'.$merchantId : 'https://pay.fiuu.com/RMS/pay/'.$merchantId;
     }
 
-    public function getPaymentUrl($orderid, $amount, $bill_name, $bill_email, $bill_mobile, $bill_desc = 'RMS PHP Library', $channel = null, $currency = null, $returnUrl = null, $callbackurl = null, $cancelurl = null)
+    public function getPaymentUrl($orderid, $amount, $bill_name, $bill_email, $bill_mobile, $bill_desc = 'Fiuu PHP Library', $channel = null, $currency = null, $returnUrl = null, $callbackurl = null, $cancelurl = null)
     {
         $amount = number_format($amount, 2, '.', '');
         $data = [
