@@ -101,7 +101,7 @@ final class PaymentTest extends TestCase
     /**
      * @depends testCanHandleInstantiationErrors
      */
-    public function testCanVerifyValidSkey($rms) : void
+    public function testCanVerifyValidSkey($fiuu) : void
     {
         $request = (object)[
             "tranID" => 1000,
@@ -118,7 +118,7 @@ final class PaymentTest extends TestCase
         $request->skey = md5($request->paydate.$request->domain.$key.$request->appcode.env('FIUU_SECRET_KEY'));
 
         $this->assertTrue(
-            $rms->verifySignature($request->paydate, $request->domain, $key, $request->appcode, $request->skey)
+            $fiuu->verifySignature($request->paydate, $request->domain, $key, $request->appcode, $request->skey)
         );
     }
 
