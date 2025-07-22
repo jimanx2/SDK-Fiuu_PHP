@@ -3,14 +3,14 @@
 require_once(__DIR__."/../support/helpers.php");
 
 use PHPUnit\Framework\TestCase;
-use RazerMerchantServices\Payment as RmsPayment;
+use Fiuu\Payment as FiuuPayment;
 
 final class PackageTest extends TestCase
 {
     public function testCanDiscoverThisPackage(): void
     {
         $this->assertTrue(
-            class_exists(RmsPayment::class)
+            class_exists(FiuuPayment::class)
         );
     }
 
@@ -19,9 +19,9 @@ final class PackageTest extends TestCase
      */
     public function testCanInstantateBaseClass(): void
     {
-        $rms = new RmsPayment(null, null, null, null);
+        $rms = new FiuuPayment(null, null, null, null);
 
         $this->assertNotNull($rms);
-        $this->assertEquals(get_class($rms), RmsPayment::class);
+        $this->assertEquals(get_class($rms), FiuuPayment::class);
     }
 }
