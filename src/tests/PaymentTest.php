@@ -3,7 +3,7 @@
 require_once(__DIR__."/../support/helpers.php");
 
 use PHPUnit\Framework\TestCase;
-use RazerMerchantServices\Payment as RmsPayment;
+use Fiuu\Payment as FiuuPayment;
 
 final class PaymentTest extends TestCase
 {
@@ -23,28 +23,28 @@ final class PaymentTest extends TestCase
         self::$bill_mobile = "+60123456789";
     }
 
-    public function testCanHandleInstantiationErrors(): RmsPayment
+    public function testCanHandleInstantiationErrors(): FiuuPayment
     {
-        $rms = new RmsPayment(env('RMS_MERCHANT_ID'), env('RMS_VERIFY_KEY'), env('RMS_SECRET_KEY'), env('RMS_ENVIRONMENT'));
+        $fiuu = new FiuuPayment(env('FIUU_MERCHANT_ID'), env('FIUU_VERIFY_KEY'), env('FIUU_SECRET_KEY'), env('FIUU_ENVIRONMENT'));
         
         $this->assertEquals(
-            RmsPayment::class,
-            get_class($rms)
+            FiuuPayment::class,
+            get_class($fiuu)
         );
 
         // TODO: add handling for invalid instantiations
         //       and then test the errors here
         // $this->expectException(InvalidArgumentException::class);
 
-        return $rms;
+        return $fiuu;
     }
 
     /**
      * @depends testCanHandleInstantiationErrors
      */
-    public function testCanCreatePaymentLink(RmsPayment $rms): string
+    public function testCanCreatePaymentLink(FiuuPayment $fiuu): string
     {
-        $url = $rms->getPaymentUrl(
+        $url = $fiuu->getPaymentUrl(
             self::$orderid, 
             self::$amount, 
             self::$bill_name, 
@@ -61,7 +61,7 @@ final class PaymentTest extends TestCase
 
         // check domain must be pointing to correct endpoint
         if (env("RMS_ENVIRONMENT") == "sandbox") {
-            $this->assertStringStartsWith("https://sandbox.merchant.razer.com", $url);
+            $this->assertStringStartsWith("https://sandbox-payment.fiuu.com", $url);
         } else {
             $this->assertStringStartsWith("https://pay.merchant.razer.com", $url);
         }
@@ -80,7 +80,7 @@ final class PaymentTest extends TestCase
         $this->assertStringContainsString("bill_name=".urlencode(self::$bill_name), $url);
         $this->assertStringContainsString("bill_email=".urlencode(self::$bill_email), $url);
         $this->assertStringContainsString("bill_mobile=".urlencode(self::$bill_mobile), $url);
-        $this->assertStringContainsString("bill_desc=".urlencode("RMS PHP Library"), $url);
+        $this->assertStringContainsString("bill_desc=".urlencode("Fiuu PHP Library"), $url);
 
         return $url;
     }
@@ -115,7 +115,7 @@ final class PaymentTest extends TestCase
         ];
 
         $key = md5($request->tranID.$request->orderid.$request->status.$request->domain.$request->amount.$request->currency);
-        $request->skey = md5($request->paydate.$request->domain.$key.$request->appcode.env('RMS_SECRET_KEY'));
+        $request->skey = md5($request->paydate.$request->domain.$key.$request->appcode.env('FIUU_SECRET_KEY'));
 
         $this->assertTrue(
             $rms->verifySignature($request->paydate, $request->domain, $key, $request->appcode, $request->skey)
@@ -134,7 +134,7 @@ final class PaymentTest extends TestCase
             "status" => "00",
             "currency" => "MYR",
             "paydate" => date("Ymd H:i:s"),
-            "domain" => env("RMS_MERCHANT_ID"),
+            "domain" => env("FIUU_MERCHANT_ID"),
             "appcode" => "123456",
         ];
 
@@ -142,7 +142,7 @@ final class PaymentTest extends TestCase
         $request->skey = "just-a-tampered-skey";
 
         $this->assertNotTrue(
-            $rms->verifySignature($request->paydate, $request->domain, $key, $request->appcode, $request->skey)
+            $fiuu->verifySignature($request->paydate, $request->domain, $key, $request->appcode, $request->skey)
         );
     }
 }
