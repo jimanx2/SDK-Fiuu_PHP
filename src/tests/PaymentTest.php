@@ -125,7 +125,7 @@ final class PaymentTest extends TestCase
     /**
      * @depends testCanHandleInstantiationErrors
      */
-    public function testCanVerifyInvalidSkey($rms) : void
+    public function testCanVerifyInvalidSkey($fiuu) : void
     {
         $request = (object)[
             "tranID" => 1000,
